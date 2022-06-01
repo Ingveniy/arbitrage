@@ -4,6 +4,11 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "antd": "^4.20.7",
+    "ccxt": "^1.84.58",
+    "chart.js": "^3.8.0",
+    "fast-json-stringify": "^3.2.0",
+    "lodash": "^4.17.21",
     "react": "^16.3.1",
     "react-dom": "^16.3.1",
     "react-scripts": "1.1.4"
