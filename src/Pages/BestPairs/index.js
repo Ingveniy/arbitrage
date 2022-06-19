@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { Typography, Select, Button } from "antd";
+import { Typography, Select, Button, Divider } from "antd";
 import { filter, includes } from "lodash";
 import { AllPairsTable } from "../../Components/AllPairsTable";
 import { BestPairsTable } from "../../Components/BestPairsTable";
@@ -8,7 +8,7 @@ import "./index.scss";
 
 const { Title } = Typography;
 
-export const TrackMultiplyPairs = () => {
+export const BestPairs = ({}) => {
   const [appIsStartup, setAppIsStartup] = useState(false);
   const [exchangesSelector, setExchangeSelector] = useState([]);
   const [dataForTabel, setDataForTabel] = useState([]);
@@ -16,6 +16,7 @@ export const TrackMultiplyPairs = () => {
   const [availablePairs, setAvailablePairs] = useState([]);
   const [availableExchanges, setAvailableExchanges] = useState([]);
 
+  const [intervalId, setIntervalId] = useState("");
   const {
     getAllExchanges,
     getAvailablePairsFromExchange,
@@ -26,18 +27,21 @@ export const TrackMultiplyPairs = () => {
     setAvailableExchanges(getAllExchanges());
   }, []);
 
-  let currentInterval = "";
   useEffect(() => {
     if (appIsStartup) {
-      currentInterval = setInterval(() => getAllTickersFromExchanges(), 5000);
+      const interval = setInterval(() => getAllTickersFromExchanges(), 5000);
+      setIntervalId(interval);
     } else {
+      clearInterval(intervalId);
     }
   }, [appIsStartup]);
 
   const handleSelectExchange = async (selectedExchanges) => {
+    //
     if (appIsStartup) {
       setAppIsStartup(false);
     }
+
     setExchangeSelector(selectedExchanges);
 
     if (selectedExchanges.length < 2) {
@@ -52,10 +56,28 @@ export const TrackMultiplyPairs = () => {
       allPairs.push(...symbols);
     }
 
-    const allAvailablePairs = await filter(allPairs, (val, i, iteratee) =>
-      includes(iteratee, val, i + 1)
+    const allCompairedPairs = await filter(allPairs, (value, index, iteratee) =>
+      includes(iteratee, value, index + 1)
     );
 
+    // Удаляем фиат из общих пар
+    const fiatCurrencies = ["EUR", "USD", "GBP", "RUB", "UAH"];
+    const allAvailablePairs = [];
+    for (const pairName of allCompairedPairs) {
+      const [tickerOfPair, makerOfPair] = pairName.split("/");
+
+      // Выбиваем из цикла если есть фиат
+      for (const [index, currencyName] of fiatCurrencies.entries()) {
+        if (tickerOfPair === currencyName || makerOfPair === currencyName) {
+          break;
+        }
+
+        // Если нас не выбило из цикла до последнего элемента в массиве фиата, то это не фиат
+        if (index + 1 === fiatCurrencies.length) {
+          allAvailablePairs.push(pairName);
+        }
+      }
+    }
     setAvailablePairs(allAvailablePairs);
   };
 
@@ -97,8 +119,11 @@ export const TrackMultiplyPairs = () => {
 
   console.log(dataForTabel, "dataForTabel");
   return (
-    <div className="root">
-      <Title level={4}>Выберите биржы</Title>
+    <React.Fragment>
+      <Title level={2}>Поиск лучших арбитражных пар</Title>
+      <Divider />
+
+      <Title level={5}>Выберите биржы</Title>
       <Select
         mode="multiple"
         style={{ width: "40%" }}
@@ -107,27 +132,20 @@ export const TrackMultiplyPairs = () => {
         onChange={handleSelectExchange}
         options={exchangeOptions}
         value={exchangesSelector}
+        listHeight={150}
       />
 
+      <br />
+      <br />
       <br />
 
       {appIsStartup ? (
         <React.Fragment>
+          <BestPairsTable dataForTable={dataForTabel} />
+          <br />
           <Button type="primary" onClick={() => setAppIsStartup(false)}>
             Остановить отслеживание
           </Button>
-          <br />
-          <Title level={4}>Топ 10 пар по профиту</Title>
-          <BestPairsTable dataForTable={dataForTabel} />
-          <br />
-          <br />
-          <br />
-          <Title level={4}>Все доступные пары для всех выбранных бирж</Title>
-          <AllPairsTable dataForTable={dataForTabel} />
-          <br />
-          <br />
-          <br />
-          <Title level={4}>Черный список пар</Title>
         </React.Fragment>
       ) : (
         <Button
@@ -138,6 +156,6 @@ export const TrackMultiplyPairs = () => {
           Начать отслеживание
         </Button>
       )}
-    </div>
+    </React.Fragment>
   );
 };

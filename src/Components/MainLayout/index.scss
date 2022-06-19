@@ -1,0 +1,25 @@
+.mainLayout {
+  height: 100%;
+
+  .layout {
+    background-color: #fff;
+    margin-left: 256px;
+  }
+
+  .siderLayout {
+    overflow: auto;
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 256px;
+  }
+
+  .contentLayout {
+    margin-top: 25px;
+    margin-left: 25px;
+    margin-right: 25px;
+    overflow: "initial";
+  }
+}

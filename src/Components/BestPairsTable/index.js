@@ -1,26 +1,21 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Table } from "antd";
 import "./index.scss";
 
-export const BestPairsTable = ({
-  dataForTable = {
-    binance: {
-      "BTC/USDT": {
-        lastPrice: 10,
-        avgPrice: 20,
-      },
-    },
-    exmo: {
-      "BTC/USDT": {
-        lastPrice: 11,
-        avgPrice: 21,
-      },
-    },
-  },
-}) => {
+export const BestPairsTable = ({ dataForTable }) => {
   const allExhanges = Object.keys(dataForTable) || [];
   const allPairs =
     allExhanges.length > 0 ? Object.keys(dataForTable[allExhanges[0]]) : [];
+
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    if (allPairs.length > 0) {
+      setIsLoading(false);
+    } else {
+      setIsLoading(true);
+    }
+  }, [dataForTable]);
 
   const dataSource = allPairs.map((pairName, index) => {
     const rowData = {
@@ -115,5 +110,14 @@ export const BestPairsTable = ({
     },
   ];
 
-  return <Table dataSource={dataSource} columns={columns} pagination={false} />;
+  return (
+    <Table
+      className="table"
+      dataSource={dataSource}
+      scroll={{ y: 300 }}
+      columns={columns}
+      pagination={false}
+      loading={isLoading}
+    />
+  );
 };
