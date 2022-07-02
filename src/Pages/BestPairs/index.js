@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { Typography, Select, Button, Divider } from "antd";
 import { filter, includes } from "lodash";
-import { AllPairsTable } from "../../Components/AllPairsTable";
 import { BestPairsTable } from "../../Components/BestPairsTable";
 import { useCCXT } from "../../hook";
 import "./index.scss";
@@ -24,7 +23,7 @@ export const BestPairs = ({}) => {
   } = useCCXT({});
 
   useEffect(() => {
-    setAvailableExchanges(getAllExchanges());
+    // setAvailableExchanges(getAllExchanges());
   }, []);
 
   useEffect(() => {
@@ -92,6 +91,8 @@ export const BestPairs = ({}) => {
         exchangeName,
         pairNames: availablePairs,
       });
+
+      console.log(response, "response");
 
       Object.keys(response).map((pairName) => {
         resultData[exchangeName] = {

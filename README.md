@@ -1,58 +1,70 @@
-# Create-React-App-Scss
-This project contains boilerplate code for using scss/sass with `create-react-app` generated app.
+# Getting Started with Create React App
 
-Demo: https://mzohaibqc.github.io/create-react-app-sass/
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-Credit: SCSS styles/src is taken from here https://templated.co/
+## Available Scripts
 
-## Folder Structure
-```
-/
-  README.md
-  node_modules/
-  package.json
-  public/
-    index.html
-    favicon.ico
-  src/
-    App.js
-    App.test.js
-    index.js
-    styles/
-      /components
-      main.scss
-```
+In the project directory, you can run:
 
-Step:
+### `npm start`
 
-- Create app `create-react-app app-name && cd app-name`
-- Add following dependencies
-  - yarn add -D react-app-rewired
-  - yarn add -D react-app-rewire-sass-modules
-  - yarn add -D sass-loader
-  - yarn add -D node-sass
+Runs the app in the development mode.\
+Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
-- Change npm `start` and `build` scripts from
-```json
-{
-  "start": "react-scripts start",
-  "build": "react-scripts build"
-}
-```
-to
-```json
-{
-  "start": "react-app-rewired start",
-  "build": "react-app-rewired build"
-}
-```
-- Add `config-overrides.js` file and add following code
-```js
-const rewireSass = require('react-app-rewire-sass-modules');
-module.exports = function override(config, env) {
-  config = rewireSass(config, env);
-  return config;
-}
-```
-- Add scss/sass styles in `/src/styles` directory
-- Run your app and you are good to go :) yahooo....
+The page will reload when you make changes.\
+You may also see any lint errors in the console.
+
+### `npm test`
+
+Launches the test runner in the interactive watch mode.\
+See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+
+### `npm run build`
+
+Builds the app for production to the `build` folder.\
+It correctly bundles React in production mode and optimizes the build for the best performance.
+
+The build is minified and the filenames include the hashes.\
+Your app is ready to be deployed!
+
+See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+
+### `npm run eject`
+
+**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+
+If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+
+Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+
+You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+
+## Learn More
+
+You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+
+To learn React, check out the [React documentation](https://reactjs.org/).
+
+### Code Splitting
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+
+### Analyzing the Bundle Size
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+
+### Making a Progressive Web App
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+
+### Advanced Configuration
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+
+### Deployment
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+
+### `npm run build` fails to minify
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
