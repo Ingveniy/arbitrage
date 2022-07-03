@@ -1,0 +1,26 @@
+{
+  "name": "cryptopult_server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node –experimental-modules index.js",
+    "dev": "nodemon –experimental-modules index.js"
+  },
+  "dependencies": {
+    "body-parser": "^1.20.0",
+    "ccxt.pro": "github:kroitor/ccxt.pro",
+    "cors": "^2.8.5",
+    "express": "^4.18.1",
+    "http": "^0.0.1-security",
+    "mongoose": "^6.4.2",
+    "socket.io": "^4.5.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.18"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
