@@ -7,8 +7,10 @@ import { Server as HttpServer } from "http";
 import { Server as HttpsServer } from "https";
 import { Server as SocketServer } from "socket.io";
 import ccxt from "ccxt.pro";
+import fs from "fs";
 
 const PORT = process.env.PORT || 3004;
+const isDev = process.env.NODE_ENV === "development";
 const app = express();
 
 // parse application/x-www-form-urlencoded
@@ -30,13 +32,14 @@ app.use((req, res, next) => {
   next();
 });
 
-const http = new HttpServer(app);
-const https = new HttpsServer(app);
+const http = isDev
+  ? new HttpServer(app)
+  : new HttpsServer(app, {
+      cert: fs.readFileSync("/etc/letsencrypt/live/cryptopult.pro/cert.pem"),
+      key: fs.readFileSync("/etc/letsencrypt/live/cryptopult.pro/privkey.pem"),
+    });
 
-const io = new SocketServer(
-  process.env.NODE_ENV === "production" ? https : http,
-  { cors: { origin: "*" } }
-);
+const io = new SocketServer(http, { cors: { origin: "*" }, secure: true });
 
 (async function start() {
   try {
