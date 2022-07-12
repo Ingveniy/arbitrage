@@ -6,7 +6,7 @@ const isDev = process.env.NODE_ENV === "development";
 const socket = io(isDev ? DEV_WS : PRODUCTION_WS, {
   secure: isDev ? false : true,
   reconnectionDelayMax: 5000,
-  path: "/api",
+  path: "/socket",
 });
 
 // Получить список доступных бир

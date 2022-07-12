@@ -4,7 +4,6 @@ import mongoose from "mongoose";
 import rootRouter from "./routes/index.js";
 import bodyParser from "body-parser";
 import { Server as HttpServer } from "http";
-import { Server as HttpsServer } from "https";
 import { Server as SocketServer } from "socket.io";
 import ccxt from "ccxt.pro";
 import fs from "fs";
@@ -32,17 +31,15 @@ app.use((req, res, next) => {
   next();
 });
 
-const http = isDev
-  ? new HttpServer(app)
-  : new HttpsServer(app, {
-      cert: fs.readFileSync("/etc/letsencrypt/live/cryptopult.pro/cert.pem"),
-      key: fs.readFileSync("/etc/letsencrypt/live/cryptopult.pro/privkey.pem"),
-    });
+const http = new HttpServer(app, {
+  cert: fs.readFileSync("/etc/letsencrypt/live/cryptopult.pro/cert.pem"),
+  key: fs.readFileSync("/etc/letsencrypt/live/cryptopult.pro/privkey.pem"),
+});
 
 const io = new SocketServer(http, {
   cors: { origin: "*" },
-  secure: true,
-  path: "/api",
+  secure: isDev ? false : true,
+  path: "/socket",
 });
 
 (async function start() {
