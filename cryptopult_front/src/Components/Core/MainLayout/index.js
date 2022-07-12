@@ -3,7 +3,7 @@ import React from "react";
 import { SidebarMenu } from "../SidebarMenu";
 import "./index.scss";
 
-const { Header, Sider, Content } = Layout;
+const { Sider, Content } = Layout;
 
 export const MainLayout = ({ children }) => {
   return (
