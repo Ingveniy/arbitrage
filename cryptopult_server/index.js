@@ -35,6 +35,7 @@ app.use((req, res, next) => {
 const http = isDev
   ? new HttpServer(app)
   : new HttpsServer(app, {
+      path: "/api",
       cert: fs.readFileSync("/etc/letsencrypt/live/cryptopult.pro/cert.pem"),
       key: fs.readFileSync("/etc/letsencrypt/live/cryptopult.pro/privkey.pem"),
     });
