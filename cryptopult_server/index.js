@@ -46,6 +46,7 @@ const io = new SocketServer(
 
     http.listen(PORT, () => {
       console.log("Server has been started on port", PORT);
+      console.log(io, "io");
     });
 
     // ccxt module
