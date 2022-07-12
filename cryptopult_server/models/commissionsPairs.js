@@ -18,11 +18,7 @@ const schema = new Schema(
       required: true,
       ref: "NetsPairs",
     },
-    commissionInput: {
-      type: Types.Number,
-      required: true,
-    },
-    commissionOutput: {
+    commission: {
       type: Types.Number,
       required: true,
     },

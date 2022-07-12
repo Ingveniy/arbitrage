@@ -4,4 +4,5 @@ export const MAIN_ROUTES = {
   commissions: "/commissions",
   nets: "/nets",
   allPairs: "/allpairs",
+  settings: "/settings",
 };

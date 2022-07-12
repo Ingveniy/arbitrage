@@ -1,22 +1,17 @@
-import React, { useEffect } from "react";
-import {
-  wsConnect,
-  wsEmitGetAvailableExchanges,
-} from "../../api/wsEvents/ccxt";
-
+import React from "react";
+import { Typography, Divider } from "antd";
+import { NetsTable } from "../../Components/NetsTable";
 import "./index.scss";
 
-export const ExchangeCoinNets = ({}) => {
-  useEffect(() => {
-    wsConnect();
-  }, []);
+const { Title } = Typography;
 
+export const ExchangeCoinNets = ({}) => {
   return (
-    <div>
-      <button onClick={wsEmitGetAvailableExchanges}>
-        Получить список бирж
-      </button>
-      <button>Получить список монет на бирже</button>
-    </div>
+    <React.Fragment>
+      <Title level={2}>Сети</Title>
+      <Divider />
+
+      <NetsTable dataForTable={[]} />
+    </React.Fragment>
   );
 };

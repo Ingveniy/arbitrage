@@ -14,45 +14,41 @@ export const wsConnect = () => {
 };
 
 // Получить список доступных бир
-export const wsEmitGetAvailableExchanges = async () => {
-  const responce = await socket.emit(
-    "getAvailableExchanges",
-    {},
-    (response) => {
-      console.log(response, "response getAvailableExchanges");
-
-      return responce;
-    }
-  );
+export async function wsEmitGetAvailableExchanges() {
+  const responce = await new Promise((resolve) => {
+    socket.emit("getAvailableExchanges", {}, ({ data }) => {
+      resolve(data);
+    });
+  });
 
   return responce;
-};
+}
 
 // Получить список пар для биржи
-export const wsEmitGetAllExchangePairs = ({ exchangeName }) => {
-  const responce = socket.emit(
-    "getAllExchangePairs",
-    { exchangeName },
-    (response) => {
-      console.log(response, "response getAllExchangePairs");
-
-      return responce;
-    }
-  );
+export const wsEmitGetAllExchangePairs = async ({ exchangeName }) => {
+  const responce = await new Promise((resolve) => {
+    socket.emit("getAllExchangePairs", { exchangeName }, ({ data }) => {
+      resolve(data);
+    });
+  });
 
   return responce;
 };
 
 // Получить информацию по массиву пар
-export const wsEmitGetExchangeMarketByPairs = ({ exchangeName, pairs }) => {
-  const responce = socket.emit(
-    "getExchangeMarketByPairs",
-    { exchangeName, pairs },
-    (response) => {
-      console.log(response, "response getExchangeMarketByPairs");
-      return responce;
-    }
-  );
+export const wsEmitGetExchangeMarketByPairs = async ({
+  exchangeName,
+  pairNames,
+}) => {
+  const responce = await new Promise((resolve) => {
+    socket.emit(
+      "getExchangeMarketByPairs",
+      { exchangeName, pairNames },
+      ({ data }) => {
+        resolve(data);
+      }
+    );
+  });
 
   return responce;
 };

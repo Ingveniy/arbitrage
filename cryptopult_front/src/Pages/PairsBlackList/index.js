@@ -1,5 +1,6 @@
-import React, { useEffect, useState, useCallback } from "react";
-import { Typography, Select, Button, Divider } from "antd";
+import React from "react";
+import { Typography, Divider } from "antd";
+import { BlacklistTable } from "../../Components/BlacklistTable";
 import "./index.scss";
 
 const { Title } = Typography;
@@ -10,7 +11,7 @@ export const PairsBlackList = ({}) => {
       <Title level={2}>Черный список пар</Title>
       <Divider />
 
-      {/* <BlackListTable dataForTable={[]} /> */}
+      <BlacklistTable dataForTable={[]} />
     </React.Fragment>
   );
 };

@@ -1,32 +1,32 @@
-// import ccxt from "ccxt";
+import {
+  wsEmitGetAvailableExchanges,
+  wsEmitGetAllExchangePairs,
+  wsEmitGetExchangeMarketByPairs,
+} from "./api/wsEvents/ccxt";
 
 export const useCCXT = ({}) => {
-  const getAllExchanges = () => {
-    // return ccxt.exchanges;
+  const getAllExchanges = async () => {
+    const allExchanges = await wsEmitGetAvailableExchanges();
+    return allExchanges;
   };
 
-  const getAvailablePairsFromExchange = async ({ exchangeName }) => {
-    // let exchange = new ccxt[exchangeName]();
-    // const markets = await exchange.loadMarkets();
-    // const symbols = await Object.keys(markets);
-    // return symbols;
+  const getAvailablePairsFromExchange = ({ exchangeName }) => {
+    const allPairs = wsEmitGetAllExchangePairs({ exchangeName });
+
+    return allPairs;
   };
 
-  const getTickerFromExchange = async ({ exchangeName, pairName }) => {
-    // let exchange = new ccxt[exchangeName]();
-    // const response = await exchange.fetchTicker(pairName);
-    // return response;
-  };
+  const getTickersFromExchange = ({ exchangeName, pairNames }) => {
+    const pairs = wsEmitGetExchangeMarketByPairs({
+      exchangeName,
+      pairNames,
+    });
 
-  const getTickersFromExchange = async ({ exchangeName, pairNames }) => {
-    // let exchange = new ccxt[exchangeName]();
-    // const response = await exchange.fetchTickers(pairNames);
-    // return response;
+    return pairs;
   };
 
   return {
     getAllExchanges,
-    getTickerFromExchange,
     getTickersFromExchange,
     getAvailablePairsFromExchange,
   };

@@ -5,7 +5,7 @@ import rootRouter from "./routes/index.js";
 import bodyParser from "body-parser";
 import { Server as HttpServer } from "http";
 import { Server as SocketServer } from "socket.io";
-
+import ccxt from "ccxt.pro";
 const PORT = process.env.PORT || 3004;
 const app = express();
 
@@ -41,22 +41,31 @@ const io = new SocketServer(http, { cors: { origin: "*" } });
       console.log("Server has been started on port", PORT);
     });
 
+    // ccxt module
     io.on("connection", (socket) => {
       console.log("user connected");
 
-      socket.on("getAvailableExchanges", (_, callback) => {
-        callback({ data: ["exmo", "binance"] });
+      socket.on("getAvailableExchanges", async (_, callback) => {
+        const exhanges = await ccxt.exchanges;
+
+        callback({ data: exhanges });
       });
 
-      socket.on("getAllExchangePairs", (args, callback) => {
+      socket.on("getAllExchangePairs", async (args, callback) => {
         const { exchangeName } = args;
-        callback({ data: ["exmo", "binance"] });
+        let exchange = new ccxt[exchangeName]();
+        const markets = await exchange.loadMarkets();
+        const symbols = await Object.keys(markets);
+
+        callback({ data: symbols });
       });
 
-      socket.on("getExchangeMarketByPairs", (args, callback) => {
-        const { exchangeName, pairs } = args;
+      socket.on("getExchangeMarketByPairs", async (args, callback) => {
+        const { exchangeName, pairNames } = args;
+        let exchange = new ccxt[exchangeName]();
+        const response = await exchange.fetchTickers(pairNames);
 
-        callback({ data: ["exmo", "binance"] });
+        callback({ data: response });
       });
 
       socket.on("disconnect", function () {});
