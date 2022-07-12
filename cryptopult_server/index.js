@@ -4,8 +4,10 @@ import mongoose from "mongoose";
 import rootRouter from "./routes/index.js";
 import bodyParser from "body-parser";
 import { Server as HttpServer } from "http";
+import { Server as HttpsServer } from "https";
 import { Server as SocketServer } from "socket.io";
 import ccxt from "ccxt.pro";
+
 const PORT = process.env.PORT || 3004;
 const app = express();
 
@@ -29,7 +31,12 @@ app.use((req, res, next) => {
 });
 
 const http = new HttpServer(app);
-const io = new SocketServer(http, { cors: { origin: "*" } });
+const https = new HttpsServer(app);
+
+const io = new SocketServer(
+  process.env.NODE_ENV === "production" ? https : http,
+  { cors: { origin: "*" } }
+);
 
 (async function start() {
   try {
