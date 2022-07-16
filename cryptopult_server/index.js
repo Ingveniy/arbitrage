@@ -9,7 +9,7 @@ import ccxt from "ccxt.pro";
 import fs from "fs";
 
 const PORT = process.env.PORT || 3004;
-const isDev = process.env.NODE_ENV === "development";
+const isProd = process.env.NODE_ENV === "production";
 const app = express();
 
 // parse application/x-www-form-urlencoded
@@ -31,14 +31,21 @@ app.use((req, res, next) => {
   next();
 });
 
-const http = new HttpServer(app, {
-  cert: fs.readFileSync("/etc/letsencrypt/live/cryptopult.pro/cert.pem"),
-  key: fs.readFileSync("/etc/letsencrypt/live/cryptopult.pro/privkey.pem"),
-});
+const http = new HttpServer(
+  app,
+  isProd
+    ? {
+        cert: fs.readFileSync("/etc/letsencrypt/live/cryptopult.pro/cert.pem"),
+        key: fs.readFileSync(
+          "/etc/letsencrypt/live/cryptopult.pro/privkey.pem"
+        ),
+      }
+    : {}
+);
 
 const io = new SocketServer(http, {
   cors: { origin: "*" },
-  secure: isDev ? false : true,
+  secure: isProd ? true : false,
   path: "/socket",
 });
 
@@ -50,7 +57,6 @@ const io = new SocketServer(http, {
 
     http.listen(PORT, () => {
       console.log("Server has been started on port", PORT);
-      console.log(io, "io");
     });
 
     // ccxt module

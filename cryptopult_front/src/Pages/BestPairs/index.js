@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Typography, Select, Button, Divider, Spin } from "antd";
-import { filter, includes } from "lodash";
 import { BestPairsTable } from "../../Components/BestPairsTable";
 import { useCCXT } from "../../hook";
 import "./index.scss";
 
 const { Title } = Typography;
 
-export const BestPairs = ({}) => {
+export const BestPairs = () => {
   const [appStep, setAppStep] = useState(1);
 
   const [exchangesSelector, setExchangeSelector] = useState([]);
@@ -46,13 +45,41 @@ export const BestPairs = ({}) => {
         pairNames: availablePairs,
       });
 
-      Object.keys(response).map((pairName) => {
+      console.log(response, `response for ${exchangeName}`);
+      Object.keys(response).forEach((pairName) => {
+        const {
+          ask = 0,
+          askVolume = 0,
+          average = 0,
+          baseVolume = 0,
+          bid = 0,
+          bidVolume = 0,
+          change,
+          close,
+          high,
+          last,
+          low,
+          open,
+          percentage,
+        } = response[pairName];
+
         resultData[exchangeName] = {
           ...resultData[exchangeName],
           ...{
             [pairName]: {
-              lastPrice: response[pairName].last,
-              avgPrice: response[pairName].average,
+              ask,
+              askVolume,
+              average,
+              baseVolume,
+              bid,
+              bidVolume,
+              change,
+              close,
+              high,
+              last,
+              low,
+              open,
+              percentage,
             },
           },
         };
@@ -81,15 +108,28 @@ export const BestPairs = ({}) => {
       allPairs.push(...symbols);
     }
 
-    const allCompairedPairs = await filter(allPairs, (value, index, iteratee) =>
-      includes(iteratee, value, index + 1)
+    // Пробегаемся по массиву пар и считаем количество совпадений для каждой пары
+    const tmpPairCounter = {};
+    for (const pairName of allPairs) {
+      if (!tmpPairCounter[pairName]) {
+        tmpPairCounter[pairName] = 0;
+      }
+
+      tmpPairCounter[pairName] = tmpPairCounter[pairName] + 1;
+    }
+
+    console.log(tmpPairCounter, "tmpPairCounter");
+
+    // Если пара повторяется столько же раз сколько и бирж в поиске то она нам подходит
+    const compairedPairs = Object.keys(tmpPairCounter).filter(
+      (pairName) => tmpPairCounter[pairName] === selectedExchanges.length
     );
 
     // Удаляем фиат из общих пар
     const fiatCurrencies = ["EUR", "USD", "GBP", "RUB", "UAH"];
     const allAvailablePairs = [];
-    console.log(allAvailablePairs, "allAvailablePairs 1");
-    for (const pairName of allCompairedPairs) {
+
+    for (const pairName of compairedPairs) {
       const [tickerOfPair, makerOfPair] = pairName.split("/");
 
       // Выбиваем из цикла если есть фиат
@@ -104,7 +144,6 @@ export const BestPairs = ({}) => {
         }
       }
     }
-    console.log(allAvailablePairs, "allAvailablePairs 2");
 
     setAvailablePairs(allAvailablePairs);
   };
@@ -190,7 +229,6 @@ export const BestPairs = ({}) => {
     }
   };
 
-  console.log(dataForTabel, "dataForTabel");
   return (
     <React.Fragment>
       <Title level={2}>Поиск лучших арбитражных пар</Title>

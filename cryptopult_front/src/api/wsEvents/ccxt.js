@@ -11,7 +11,6 @@ const socket = io(isDev ? DEV_WS : PRODUCTION_WS, {
 
 // Получить список доступных бир
 export async function wsEmitGetAvailableExchanges() {
-  console.log(socket, "socket");
   const responce = await new Promise((resolve) => {
     socket.emit("getAvailableExchanges", {}, ({ data }) => {
       resolve(data);
